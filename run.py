@@ -31,7 +31,7 @@ def subkeys(key):
     for i in perm_table:
         perm_10keys += key[i]
 
-    print("Bits permutados de la clave:", perm_10keys)
+    #print("Bits permutados de la clave:", perm_10keys)
 
     #Divide en 2 mitades de 5 bits cada una. 
     left_half = perm_10keys[:5]
@@ -84,17 +84,17 @@ def mix(subkey, left, right):
       for i in expansion_table:
             expanded_block += right[i]
 
-      print("Bloque expandido a 8 bits:", expanded_block)
+      #print("Bloque expandido a 8 bits:", expanded_block)
 
       # XOR subclave con el bloque expandido.
       xored = xor(expanded_block, subkey)
-      print("XOR entre la subclave y el bloque:", xored)
+      #print("XOR entre la subclave y el bloque:", xored)
 
       # Divide en 2 mitades de 4 bits.
       left_half = xored[:4]
       right_half = xored[4:]
 
-      print("Mitades izquierda y derecha:", left_half, right_half)
+      #print("Mitades izquierda y derecha:", left_half, right_half)
 
       # Definición de S-Boxes.      
 
@@ -141,23 +141,23 @@ def mix(subkey, left, right):
       rowleft = str(int(left_half[0] + left_half[3], 2))
       columnleft = str(int(left_half[1] + left_half[2], 2))
 
-      print("Parámetros a la primera S-box:", rowleft+columnleft)
+      #print("Parámetros a la primera S-box:", rowleft+columnleft)
       
       #Obtenemos la salida consultando a los diccionarios.
       output1 = sbox_0[rowleft+columnleft]
-      print("Salida S0:", output1)
+      #print("Salida S0:", output1)
 
       rowright = str(int(right_half[0] + right_half[3], 2))
       columnright = str(int(right_half[1] + right_half[2], 2))
 
-      print("Parámetros a la segunda S-box:", rowright+columnright)
+      #print("Parámetros a la segunda S-box:", rowright+columnright)
 
       output2 = sbox_1[rowright+columnright]
-      print("Salida S1:", output2)
+      #print("Salida S1:", output2)
 
       #Concatenamos los outputs y permutamos.
       output = output1+output2
-      print("Concatenación:", output)
+      #print("Concatenación:", output)
 
       perm_table = [1, 3, 2, 0] #Tabla de permutaciones. 
       perm_output = ""
@@ -165,15 +165,15 @@ def mix(subkey, left, right):
       # Expande el bloque a 8 bits con un ciclo for que asigna los bits de acuerdo al arreglo de permutaciones.
       for i in perm_table:
             perm_output += output[i]
-      print("Permutado:", perm_output)
+      #print("Permutado:", perm_output)
       
-      print("Al XOR", perm_output, left)
+      #print("Al XOR", perm_output, left)
       #Aplicamos XOR con la mitad izquierda:
       xorleft = xor(perm_output, left)
-      print("XOR con la izquierda:", xorleft)
+      #print("XOR con la izquierda:", xorleft)
 
       #Concatenamos con la derecha para producir el output final
-      print(right)
+      #print(right)
 
       return xorleft+right
 
@@ -187,34 +187,34 @@ def last_permutation(plain_text):
     return permuted_text
 
 def encrypt(key, plaintext):
-    print("Clave:", key)
-    print("Texto plano:", plaintext)
+    #print("Clave:", key)
+    #print("Texto plano:", plaintext)
 
     #Paso 1
     perm_text = initial_permutation(plaintext)
-    print("Permutación del paso 1:", perm_text)
+    #print("Permutación del paso 1:", perm_text)
     subkey1, subkey2 = subkeys(key)
-    print("Subclaves generadas:", subkey1, subkey2)
+    #print("Subclaves generadas:", subkey1, subkey2)
 
     #Paso 2
     left_block = perm_text[:4]
     right_block = perm_text[4:8]
     step2 = mix(subkey1, left_block, right_block)
-    print("Salida del paso 2:", step2)
+    #print("Salida del paso 2:", step2)
 
     #Paso 3
     lswap= step2[:4]
     rswap = step2[4:]
 
     swap = rswap + lswap
-    print("Salida del paso 3:", swap)
+    #print("Salida del paso 3:", swap)
 
     #Paso 4
     left_block = swap[:4]
     right_block = swap[4:8]
-    print("Nuevos bloques izquierdo y derecho para el paso 4", left_block, right_block)
+    #print("Nuevos bloques izquierdo y derecho para el paso 4", left_block, right_block)
     step4= mix(subkey2 ,left_block, right_block)
-    print("Salida del paso 4:", step4)
+    #print("Salida del paso 4:", step4)
 
     #Paso 5
     ciphered_output = last_permutation(step4)
@@ -223,38 +223,38 @@ def encrypt(key, plaintext):
 
 
 def decrypt(key, plaintext):
-    print("Clave:", key)
-    print("Texto plano:", plaintext)
+    #print("Clave:", key)
+    #print("Texto plano:", plaintext)
 
     #Paso 1
     perm_text = initial_permutation(plaintext)
-    print("Permutación del paso 1:", perm_text)
+    #print("Permutación del paso 1:", perm_text)
     subkey1, subkey2 = subkeys(key)
-    print("Subclaves generadas:", subkey1, subkey2)
+    #print("Subclaves generadas:", subkey1, subkey2)
 
     #Paso 2
     left_block = perm_text[:4]
     right_block = perm_text[4:8]
     step2 = mix(subkey2, left_block, right_block)
-    print("Salida del paso 2:", step2)
+    #print("Salida del paso 2:", step2)
 
     #Paso 3
     lswap= step2[:4]
     rswap = step2[4:]
 
     swap = rswap + lswap
-    print("Salida del paso 3:", swap)
+    #print("Salida del paso 3:", swap)
 
     #Paso 4
     left_block = swap[:4]
     right_block = swap[4:8]
-    print("Nuevos bloques izquierdo y derecho para el paso 4", left_block, right_block)
+    #print("Nuevos bloques izquierdo y derecho para el paso 4", left_block, right_block)
     step4= mix(subkey1 ,left_block, right_block)
-    print("Salida del paso 4:", step4)
+    #print("Salida del paso 4:", step4)
 
     #Paso 5
     unciphered_output = last_permutation(step4)
-    print(unciphered_output)
+    #print(unciphered_output)
     return unciphered_output
 
 
