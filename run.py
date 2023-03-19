@@ -270,7 +270,8 @@ key = inputs[1]
 plaintext = inputs[2]
 
 if (mode == 'E'):
-    unciphered_output = encrypt(key, plaintext)
-    print(unciphered_output)
+    ciphered_output = encrypt(key, plaintext)
+    print(ciphered_output)
 else:
-    decrypt(key, plaintext)
+    unciphered_output = decrypt(key, plaintext)
+    print(unciphered_output)
