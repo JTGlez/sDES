@@ -216,7 +216,6 @@ def encrypt(key, plaintext):
     step4= mix(subkey2 ,left_block, right_block)
     print("Salida del paso 4:", step4)
 
-
     #Paso 5
     ciphered_output = last_permutation(step4)
 
@@ -253,10 +252,9 @@ def decrypt(key, plaintext):
     step4= mix(subkey1 ,left_block, right_block)
     print("Salida del paso 4:", step4)
 
-
     #Paso 5
     unciphered_output = last_permutation(step4)
-
+    print(unciphered_output)
     return unciphered_output
 
 
@@ -272,6 +270,7 @@ key = inputs[1]
 plaintext = inputs[2]
 
 if (mode == 'E'):
-    encrypt(key, plaintext)
+    unciphered_output = encrypt(key, plaintext)
+    print(unciphered_output)
 else:
     decrypt(key, plaintext)
