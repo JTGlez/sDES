@@ -267,7 +267,9 @@ inputs = []
 for entrada in fp.input():
     inputs.append(entrada.strip())
 
-mode = inputs[0], key = inputs[1], plaintext = inputs[2]
+mode = inputs[0]
+key = inputs[1]
+plaintext = inputs[2]
 
 if (mode == 'E'):
     encrypt(key, plaintext)
